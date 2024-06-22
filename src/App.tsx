@@ -1,5 +1,6 @@
 import { z } from "zod";
 import * as React from 'react';
+import { SelectChangeEvent } from "@mui/material";
 import dayjs, { Dayjs } from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -35,7 +36,7 @@ type RegistrationSchemaType = z.infer<typeof RegistrationSchema>;
 
 export default function App() {
   const [dateValue, setDateValue] = React.useState<Dayjs | null>(dayjs());
-  const [position, setPosition] = React.useState("Developer");
+  const [position, setPosition] = React.useState<string>("Developer");
   const [open, setOpen] = React.useState(false);
   const [submittedData, setSubmittedData] = React.useState<RegistrationSchemaType | null>(null);
 
@@ -49,7 +50,7 @@ export default function App() {
     setOpen(true);
   };
 
-  const handlePositionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handlePositionChange = (event: SelectChangeEvent<string >) => {
     setPosition(event.target.value as string);
   };
 
@@ -142,7 +143,7 @@ export default function App() {
               {submittedData.exp !== undefined && <Typography><strong>Experience:</strong> {submittedData.exp} years</Typography>}
               {submittedData.url && <Typography><strong>Portfolio URL:</strong> {submittedData.url}</Typography>}
               {submittedData.manExp && <Typography><strong>Management Experience:</strong> {submittedData.manExp}</Typography>}
-              <Typography><strong>Skills:</strong> {Object.keys(submittedData.skills).filter(skill => submittedData.skills[skill]).join(', ')}</Typography>
+              <Typography><strong>Skills:</strong> {Object.keys(submittedData.skills).filter(skill => submittedData.skills[skill as keyof typeof submittedData.skills]).join(', ')}</Typography>
               <Typography><strong>Preferred Interview Time:</strong> {submittedData.datetime ? dayjs(submittedData.datetime).format('MMMM D, YYYY h:mm A') : 'N/A'}</Typography>
             </div>
           )}
